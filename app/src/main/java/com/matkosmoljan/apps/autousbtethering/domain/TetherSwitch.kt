@@ -7,4 +7,6 @@ import com.matkosmoljan.apps.autousbtethering.FunctionResult
  */
 interface TetherSwitch {
     fun turnTetheringOn(): FunctionResult<Unit>
+    fun turnTetheringOff(): FunctionResult<Unit>
+    fun getMethodNumber(): Int
 }

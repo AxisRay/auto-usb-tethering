@@ -16,7 +16,7 @@ class ShellTetherSwitch : TetherSwitch {
         KITKAT to 34,
         LOLLIPOP to 30,
         N to 33,
-        O to 34,
+        O to 41, //34 doesn't works for Samsung S7
         P to 33
     )
 
@@ -32,7 +32,19 @@ class ShellTetherSwitch : TetherSwitch {
         }
     }
 
-    private fun getMethodNumber(): Int {
+    override fun turnTetheringOff(): FunctionResult<Unit> {
+        val methodNumber = getMethodNumber()
+        val tetheringShellCommand = TetherSwitchShellCommandGenerator.generateSwitchOffCommand(methodNumber)
+        val isCommandExecutedSuccessfully = executeCommand(tetheringShellCommand)
+
+        return if (isCommandExecutedSuccessfully) {
+            FunctionResult.Success(Unit)
+        } else {
+            FunctionResult.Failure(IllegalStateException("The tethering shell call hasn't returned successfully"))
+        }
+    }
+
+    override fun getMethodNumber(): Int {
         val currentApiVersion = Build.VERSION.SDK_INT
 
         return androidApiVersionToMethodNumbers
