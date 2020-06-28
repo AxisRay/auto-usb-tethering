@@ -23,8 +23,6 @@ class UsbAttachedReceiver : BroadcastReceiver() {
             val methodNumber = prefs.getString("methodNumber", tetherSwitch.getMethodNumber().toString())
             if(enable) {
                 tetherSwitch.turnTetheringOn(methodNumber)
-            }else{
-                tetherSwitch.turnTetheringOff(methodNumber)
             }
         }
     }
