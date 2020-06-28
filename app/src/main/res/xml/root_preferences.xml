@@ -7,14 +7,8 @@
                 app:key="enableusbt"
                 app:title="@string/sync_title" />
 
-        <SwitchPreferenceCompat
-                app:dependency="enableusbt"
-                app:key="enableonbootusbt"
-                app:title="@string/attachment_title" />
-
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/messages_header">
-
         <EditTextPreference
                 android:key="methodNumber"
                 android:selectAllOnFocus="true"

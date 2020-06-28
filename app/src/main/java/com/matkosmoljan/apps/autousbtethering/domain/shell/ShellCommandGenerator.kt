@@ -22,6 +22,11 @@ object TetherSwitchShellCommandGenerator {
             .replace(METHOD_NUMBER_PLACEHOLDER, methodNumber.toString())
     }
 
+    fun generateSwitchOnCommand(methodNumber: String): String {
+        return USB_TETHERING_SWITCH_ON_COMMAND
+            .replace(METHOD_NUMBER_PLACEHOLDER, methodNumber)
+    }
+
     /**
      * Generates a command for switching USB tethering off using the connectivity service. The [methodNumber] depends on
      * the Android version.
@@ -29,6 +34,11 @@ object TetherSwitchShellCommandGenerator {
     fun generateSwitchOffCommand(methodNumber: Int): String {
         return USB_TETHERING_SWITCH_OFF_COMMAND
             .replace(METHOD_NUMBER_PLACEHOLDER, methodNumber.toString())
+    }
+
+    fun generateSwitchOffCommand(methodNumber: String): String {
+        return USB_TETHERING_SWITCH_OFF_COMMAND
+            .replace(METHOD_NUMBER_PLACEHOLDER, methodNumber)
     }
 
 }

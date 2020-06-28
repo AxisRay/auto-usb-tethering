@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -24,42 +25,31 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
+        val tetherSwitch: TetherSwitch = ShellTetherSwitch()
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
         }
 
         override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+            onChange()
             return true
         }
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
-                if (preference.key.equals("enableusbt")){
-                    if(preference is SwitchPreferenceCompat){
-                        val tetherSwitch: TetherSwitch = ShellTetherSwitch()
-                        if(preference.isChecked){
-                            tetherSwitch.turnTetheringOn().fold(
-                                onSuccess = {
-                                }
-                                ,
-                                onFailure = {
-                                    Toast.makeText(this.context,R.string.root_error_message,Toast.LENGTH_LONG).show()
-                                }
-                            )
-                        }else{
-                            tetherSwitch.turnTetheringOff().fold(
-                                onSuccess = {
-                                }
-                                ,
-                                onFailure = {
-                                    Toast.makeText(this.context,R.string.root_error_message,Toast.LENGTH_LONG).show()
-                                }
-                            )
-                        }
-                    }
-                }
-//                else if(preference.key.equals("methodNumber")){
-//                }
+            onChange()
             return true
+        }
+
+        private fun onChange(){
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this.context)
+            val enable = prefs.getBoolean("enableusbt", false)
+            val methodNumber = prefs.getString("methodNumber", tetherSwitch.getMethodNumber().toString())
+            if(enable){
+                tetherSwitch.turnTetheringOn(methodNumber)
+            }else{
+                tetherSwitch.turnTetheringOff(methodNumber)
+            }
         }
     }
 }

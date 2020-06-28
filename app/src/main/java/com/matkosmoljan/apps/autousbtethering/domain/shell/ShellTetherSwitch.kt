@@ -2,6 +2,7 @@ package com.matkosmoljan.apps.autousbtethering.domain.shell
 
 import android.os.Build
 import android.os.Build.VERSION_CODES.*
+import android.preference.PreferenceManager
 import com.matkosmoljan.apps.autousbtethering.FunctionResult
 import com.matkosmoljan.apps.autousbtethering.domain.TetherSwitch
 import java.io.DataOutputStream
@@ -16,7 +17,7 @@ class ShellTetherSwitch : TetherSwitch {
         KITKAT to 34,
         LOLLIPOP to 30,
         N to 33,
-        O to 41, //34 doesn't works for Samsung S7
+        O to 34, //34 doesn't works for Samsung S7
         P to 33
     )
 
@@ -44,7 +45,30 @@ class ShellTetherSwitch : TetherSwitch {
         }
     }
 
+    override fun turnTetheringOn(method:String): FunctionResult<Unit> {
+        val tetheringShellCommand = TetherSwitchShellCommandGenerator.generateSwitchOnCommand(method)
+        val isCommandExecutedSuccessfully = executeCommand(tetheringShellCommand)
+
+        return if (isCommandExecutedSuccessfully) {
+            FunctionResult.Success(Unit)
+        } else {
+            FunctionResult.Failure(IllegalStateException("The tethering shell call hasn't returned successfully"))
+        }
+    }
+
+    override fun turnTetheringOff(method:String): FunctionResult<Unit> {
+        val tetheringShellCommand = TetherSwitchShellCommandGenerator.generateSwitchOffCommand(method)
+        val isCommandExecutedSuccessfully = executeCommand(tetheringShellCommand)
+
+        return if (isCommandExecutedSuccessfully) {
+            FunctionResult.Success(Unit)
+        } else {
+            FunctionResult.Failure(IllegalStateException("The tethering shell call hasn't returned successfully"))
+        }
+    }
+
     override fun getMethodNumber(): Int {
+
         val currentApiVersion = Build.VERSION.SDK_INT
 
         return androidApiVersionToMethodNumbers
